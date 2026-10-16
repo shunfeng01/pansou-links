@@ -150,6 +150,23 @@ button:hover {
   width: auto;
   margin: 0;
 }
+.export-btn {
+  background: #2ed573;
+  margin-top: 10px;
+}
+.import-btn {
+  background: #1e90ff;
+  margin-top: 10px;
+}
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.btn-group button {
+  flex: 1;
+  margin-top: 0;
+}
 </style>
 </head>
 <body>
@@ -180,6 +197,11 @@ button:hover {
   <div class="admin-section">
     <button class="admin-toggle" onclick="toggleAdmin()">⚙️ 管理已生成的短链</button>
     <div class="admin-panel" id="adminPanel">
+      <div class="btn-group">
+        <button class="export-btn" onclick="exportJSON()">📤 导出JSON文件</button>
+        <button class="import-btn" onclick="document.getElementById('importFile').click()">📥 导入JSON</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+      </div>
       <div class="link-list" id="linkList"></div>
     </div>
   </div>
@@ -283,6 +305,39 @@ function deleteLink(code) {
     saveLinks(links);
     renderLinkList();
   }
+}
+
+function exportJSON() {
+  const links = getLinks();
+  const json = JSON.stringify(links, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'links.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  alert('已导出！把这个links.json上传到GitHub仓库替换原文件即可永久生效。');
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      const existing = getLinks();
+      const merged = Object.assign({}, existing, imported);
+      saveLinks(merged);
+      renderLinkList();
+      alert('导入成功！共 ' + Object.keys(imported).length + ' 条短链');
+    } catch (err) {
+      alert('导入失败：文件格式不正确');
+    }
+  };
+  reader.readAsText(file);
 }
 </script>
 </body>
