@@ -7,6 +7,11 @@ backend:
 
 local_backend: false
 
+media_folder: "media"
+public_folder: "/media"
+media_library:
+  name: default
+
 collections:
   - name: links
     label: 短链接
