@@ -25,5 +25,5 @@ collections:
             label: 短链条目
             widget: list
             fields:
-              - { name: key, label: 短码（访问后缀）, widget: string }
+              - { name: key, label: 短码, widget: string }
               - { name: value, label: 长链接, widget: string }
