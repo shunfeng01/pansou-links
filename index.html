@@ -309,7 +309,8 @@ function deleteLink(code) {
 
 function exportJSON() {
   const links = getLinks();
-  const json = JSON.stringify(links, null, 2);
+  const obj = { links: Object.keys(links).map(key => ({ key: key, value: links[key] })) };
+  const json = JSON.stringify(obj, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -327,7 +328,8 @@ function importJSON(event) {
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
-      const imported = JSON.parse(e.target.result);
+      const raw = JSON.parse(e.target.result);
+      const imported = Array.isArray(raw) ? Object.fromEntries(raw.map(x => [x.key, x.value])) : (raw.links ? Object.fromEntries(raw.links.map(x => [x.key, x.value])) : raw);
       const existing = getLinks();
       const merged = Object.assign({}, existing, imported);
       saveLinks(merged);

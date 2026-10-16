@@ -1,4 +1,6 @@
 {
-  "example": "https://www.example.com",
-  "doc01": "https://docs.qq.com/aio/DYW5Nb2ZkbGNyWkx1"
+  "links": [
+    { "key": "example", "value": "https://www.example.com" },
+    { "key": "doc01", "value": "https://docs.qq.com/aio/DYW5Nb2ZkbGNyWkx1" }
+  ]
 }

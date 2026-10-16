@@ -132,7 +132,9 @@ if (!shortCode) {
     // 从links.json查找（永久短链）
     fetch('/links.json')
       .then(res => res.json())
-      .then(links => {
+      .then(data => {
+        const arr = data && data.links ? data.links : (Array.isArray(data) ? data : null);
+        const links = arr ? Object.fromEntries(arr.map(x => [x.key, x.value])) : (data || {});
         if (links[shortCode]) {
           handleRedirect(links[shortCode]);
         } else {

@@ -1,0 +1,24 @@
+backend:
+  name: github
+  repo: shunfeng01/pansou-links
+  branch: main
+  base_url: https://pan-admin.placeholder.workers.dev
+  auth_endpoint: api/auth
+
+local_backend: false
+
+collections:
+  - name: links
+    label: 短链接
+    files:
+      - name: links
+        label: 永久短链列表
+        file: links.json
+        format: json
+        fields:
+          - name: links
+            label: 短链条目
+            widget: list
+            fields:
+              - { name: key, label: 短码（访问后缀）, widget: string }
+              - { name: value, label: 长链接, widget: string }
