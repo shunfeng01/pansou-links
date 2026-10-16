@@ -3,344 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>盘搜短链 - 短链接生成工具</title>
+<title>盘神AI资源站 - 免费资源分享导航</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.container {
-  background: white;
-  border-radius: 16px;
-  padding: 40px;
-  max-width: 600px;
-  width: 100%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 10px;
-  font-size: 28px;
-}
-.subtitle {
-  text-align: center;
-  color: #888;
-  margin-bottom: 30px;
-  font-size: 14px;
-}
-.input-group {
-  margin-bottom: 15px;
-}
-label {
-  display: block;
-  margin-bottom: 6px;
-  color: #555;
-  font-weight: 500;
-  font-size: 14px;
-}
-input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: border-color 0.3s;
-}
-input:focus {
-  outline: none;
-  border-color: #667eea;
-}
-button {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin-top: 10px;
-}
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-}
-.result {
-  margin-top: 20px;
-  padding: 15px;
-  background: #f0f4ff;
-  border-radius: 8px;
-  display: none;
-}
-.result.show { display: block; }
-.result-label {
-  font-size: 12px;
-  color: #888;
-  margin-bottom: 5px;
-}
-.result-url {
-  font-size: 16px;
-  color: #667eea;
-  font-weight: 600;
-  word-break: break-all;
-  cursor: pointer;
-}
-.result-url:hover { text-decoration: underline; }
-.hint {
-  margin-top: 20px;
-  padding: 12px;
-  background: #fff8e1;
-  border-radius: 8px;
-  font-size: 13px;
-  color: #8d6e00;
-  line-height: 1.6;
-}
-.admin-section {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-}
-.admin-toggle {
-  background: none;
-  color: #999;
-  font-size: 12px;
-  padding: 5px;
-  width: auto;
-  box-shadow: none;
-}
-.admin-toggle:hover {
-  background: none;
-  transform: none;
-  box-shadow: none;
-  color: #667eea;
-}
-.admin-panel {
-  display: none;
-  margin-top: 15px;
-}
-.admin-panel.show { display: block; }
-.link-list {
-  margin-top: 15px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-.link-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  font-size: 13px;
-}
-.link-item .short { color: #667eea; font-weight: 600; }
-.link-item .long { color: #888; flex: 1; margin: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.delete-btn {
-  background: #ff4757;
-  padding: 4px 10px;
-  font-size: 12px;
-  width: auto;
-  margin: 0;
-}
-.export-btn {
-  background: #2ed573;
-  margin-top: 10px;
-}
-.import-btn {
-  background: #1e90ff;
-  margin-top: 10px;
-}
-.btn-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-.btn-group button {
-  flex: 1;
-  margin-top: 0;
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--brand:#ff4d4f;--ink:#222;--sub:#888;--line:#eee;--bg:#f5f6f8;}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);}
+a{text-decoration:none;color:inherit;}
+
+/* 顶部导航 */
+.topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+.topbar-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:22px;padding:14px 18px;}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;}
+.logo .mark{font-size:24px;}
+.logo small{display:block;font-size:11px;font-weight:400;color:var(--sub);}
+.menu{display:flex;gap:22px;font-size:15px;color:#444;}
+.menu a{padding:4px 2px;}
+.menu a.active{color:var(--brand);font-weight:700;}
+.menu a:hover{color:var(--brand);}
+.search{margin-left:auto;position:relative;}
+.search input{width:220px;padding:9px 14px 9px 36px;border:1px solid var(--line);border-radius:20px;font-size:14px;background:#f7f7f8;outline:none;}
+.search input:focus{border-color:var(--brand);background:#fff;}
+.search::before{content:"🔍";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;}
+
+/* 圆形入口 */
+.quick{max-width:1100px;margin:26px auto 8px;padding:0 18px;display:flex;justify-content:center;gap:60px;flex-wrap:wrap;}
+.qitem{text-align:center;cursor:pointer;}
+.qcircle{width:74px;height:74px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.12);transition:.2s;}
+.qitem:hover .qcircle{transform:translateY(-4px);}
+.qitem .qname{margin-top:10px;font-size:15px;font-weight:600;}
+.c-blue{background:linear-gradient(135deg,#4d8dff,#3f6ff0);}
+.c-orange{background:linear-gradient(135deg,#ff9a4d,#ff7a2f);}
+.c-green{background:linear-gradient(135deg,#37c871,#22b25e);}
+.c-purple{background:linear-gradient(135deg,#a07bff,#8257f0);}
+
+/* 分类标签 */
+.tabs{max-width:1100px;margin:22px auto 6px;padding:0 18px;display:flex;gap:12px;font-size:14px;}
+.tab{padding:6px 16px;border-radius:18px;cursor:pointer;color:#555;background:#fff;border:1px solid var(--line);}
+.tab.active{background:var(--brand);color:#fff;border-color:var(--brand);font-weight:600;}
+
+/* 卡片流 */
+.wrap{max-width:1100px;margin:18px auto 50px;padding:0 18px;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;gap:16px;padding:16px;transition:.2s;cursor:pointer;}
+.card:hover{box-shadow:0 10px 28px rgba(0,0,0,.09);transform:translateY(-2px);}
+.cover{flex:none;width:150px;height:150px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;}
+.cover .em{font-size:46px;}
+.cover .ct{margin-top:8px;font-size:14px;font-weight:700;text-align:center;padding:0 8px;}
+.body{flex:1;display:flex;flex-direction:column;}
+.body h3{font-size:18px;line-height:1.4;margin-bottom:8px;}
+.body p{font-size:14px;color:var(--sub);line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.tags{margin-top:10px;display:flex;gap:8px;}
+.tag{font-size:12px;padding:3px 10px;border-radius:6px;}
+.t-free{background:#fff1e8;color:#ff7a2f;}
+.t-cat{background:#e8f0ff;color:#3f6ff0;}
+.meta{margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:14px;font-size:12.5px;color:#aaa;}
+.meta .date{color:#bbb;}
+.meta .views{margin-left:auto;}
+
+footer{background:#fff;border-top:1px solid var(--line);text-align:center;padding:26px 18px;color:#999;font-size:13px;line-height:1.9;}
+footer a{color:#3f6ff0;}
+.empty{grid-column:1/-1;text-align:center;color:#aaa;padding:40px;display:none;}
+
+@media(max-width:760px){
+ .wrap{grid-template-columns:1fr;}
+ .menu{display:none;}
+ .search input{width:150px;}
+ .cover{width:120px;height:120px;}
+ .quick{gap:30px;}
 }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>🔗 盘搜短链</h1>
-  <p class="subtitle">把长链接变短，分享更方便</p>
-  
-  <div class="input-group">
-    <label>长链接</label>
-    <input type="text" id="longUrl" placeholder="粘贴要缩短的长链接，比如夸克网盘链接">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="http://pan.d0b.pw/"><span class="mark">📚</span><span>盘神AI资源站<small>pansou.qd.je · 免费资源分享</small></span></a>
+    <nav class="menu">
+      <a class="active" href="http://pan.d0b.pw/">首页</a>
+      <a href="http://pan.d0b.pw/">AI视频短剧</a>
+      <a href="http://pan.d0b.pw/">带货电商</a>
+      <a href="http://pan.d0b.pw/">自媒体变现</a>
+      <a href="http://pan.d0b.pw/">AI工具</a>
+    </nav>
+    <div class="search"><input id="q" type="text" placeholder="搜索分类资源…"></div>
   </div>
-  <div class="input-group">
-    <label>自定义短码（可选）</label>
-    <input type="text" id="shortCode" placeholder="留空自动生成，比如 movie01">
-  </div>
-  <button onclick="generateShortLink()">生成短链接</button>
-  
-  <div class="result" id="result">
-    <div class="result-label">你的短链接（点击复制）：</div>
-    <div class="result-url" id="resultUrl" onclick="copyResult()"></div>
-  </div>
-  
-  <div class="hint">
-    💡 提示：短链接数据保存在浏览器本地，清理浏览器数据会丢失。<br>
-    建议重要短链同时记录到GitHub的links.json文件中，确保永久有效。
-  </div>
-  
-  <div class="admin-section">
-    <button class="admin-toggle" onclick="toggleAdmin()">⚙️ 管理已生成的短链</button>
-    <div class="admin-panel" id="adminPanel">
-      <div class="btn-group">
-        <button class="export-btn" onclick="exportJSON()">📤 导出JSON文件</button>
-        <button class="import-btn" onclick="document.getElementById('importFile').click()">📥 导入JSON</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
-      </div>
-      <div class="link-list" id="linkList"></div>
-    </div>
-  </div>
+</header>
+
+<section class="quick">
+  <a class="qitem" href="http://pan.d0b.pw/"><div class="qcircle c-blue">🎬</div><div class="qname">AI视频·短剧</div></a>
+  <a class="qitem" href="http://pan.d0b.pw/"><div class="qcircle c-orange">🛒</div><div class="qname">带货·电商</div></a>
+  <a class="qitem" href="http://pan.d0b.pw/"><div class="qcircle c-green">📈</div><div class="qname">自媒体·变现</div></a>
+  <a class="qitem" href="http://pan.d0b.pw/"><div class="qcircle c-purple">🤖</div><div class="qname">AI工具·素材</div></a>
+</section>
+
+<div class="tabs">
+  <span class="tab active">全部资源</span>
+  <span class="tab">AI视频短剧</span>
+  <span class="tab">带货电商</span>
+  <span class="tab">自媒体变现</span>
+  <span class="tab">AI工具网站</span>
 </div>
 
-<script>
-const BASE_URL = window.location.origin + '/';
+<main class="wrap" id="grid">
 
-function getLinks() {
-  return JSON.parse(localStorage.getItem('pansou_links') || '{}');
-}
-
-function saveLinks(links) {
-  localStorage.setItem('pansou_links', JSON.stringify(links));
-}
-
-function generateCode() {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let code = '';
-  for (let i = 0; i < 6; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return code;
-}
-
-function generateShortLink() {
-  const longUrl = document.getElementById('longUrl').value.trim();
-  let shortCode = document.getElementById('shortCode').value.trim();
-  
-  if (!longUrl) {
-    alert('请输入长链接');
-    return;
-  }
-  
-  if (!longUrl.startsWith('http://') && !longUrl.startsWith('https://')) {
-    alert('请输入以 http:// 或 https:// 开头的链接');
-    return;
-  }
-  
-  const links = getLinks();
-  
-  if (!shortCode) {
-    do {
-      shortCode = generateCode();
-    } while (links[shortCode]);
-  } else {
-    if (links[shortCode]) {
-      alert('这个短码已经被使用了，请换一个');
-      return;
-    }
-  }
-  
-  links[shortCode] = longUrl;
-  saveLinks(links);
-  
-  const shortUrl = BASE_URL + shortCode;
-  document.getElementById('resultUrl').textContent = shortUrl;
-  document.getElementById('result').classList.add('show');
-  
-  document.getElementById('longUrl').value = '';
-  document.getElementById('shortCode').value = '';
-  
-  renderLinkList();
-}
-
-function copyResult() {
-  const url = document.getElementById('resultUrl').textContent;
-  navigator.clipboard.writeText(url).then(() => {
-    alert('已复制到剪贴板！');
-  });
-}
-
-function toggleAdmin() {
-  document.getElementById('adminPanel').classList.toggle('show');
-  renderLinkList();
-}
-
-function renderLinkList() {
-  const links = getLinks();
-  const list = document.getElementById('linkList');
-  const keys = Object.keys(links);
-  
-  if (keys.length === 0) {
-    list.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有短链接</p>';
-    return;
-  }
-  
-  list.innerHTML = keys.map(code => `
-    <div class="link-item">
-      <span class="short">${code}</span>
-      <span class="long" title="${links[code]}">${links[code]}</span>
-      <button class="delete-btn" onclick="deleteLink('${code}')">删除</button>
+  <a class="card" href="http://pan.d0b.pw/" data-k="AI视频 短剧 漫剧 动画 数字人 科普">
+    <div class="cover c-blue"><span class="em">🎬</span><span class="ct">AI视频·短剧·漫剧</span></div>
+    <div class="body">
+      <h3>AI视频 / 短剧 / 漫剧全套教程（199条）</h3>
+      <p>AI漫剧制作、短剧推广变现、数字人、动画短片、电影解说混剪、知识科普等实战课程，从零基础到成片全流程。</p>
+      <div class="tags"><span class="tag t-free">免费资源</span><span class="tag t-cat">AI视频短剧</span></div>
+      <div class="meta"><span class="date">2026-10-17</span><span class="views">🔗 进入资源库</span></div>
     </div>
-  `).join('');
-}
+  </a>
 
-function deleteLink(code) {
-  if (confirm('确定删除这个短链接吗？')) {
-    const links = getLinks();
-    delete links[code];
-    saveLinks(links);
-    renderLinkList();
-  }
-}
+  <a class="card" href="http://pan.d0b.pw/" data-k="带货 电商 闲鱼 淘宝 亚马逊 TikTok 跨境">
+    <div class="cover c-orange"><span class="em">🛒</span><span class="ct">带货·电商·跨境</span></div>
+    <div class="body">
+      <h3>带货 / 电商 / 跨境玩法（57条）</h3>
+      <p>闲鱼无货源、淘宝拼多多、女装童装带货、亚马逊、TikTok美区、Shopify独立站等电商实战项目。</p>
+      <div class="tags"><span class="tag t-free">免费资源</span><span class="tag t-cat">带货电商</span></div>
+      <div class="meta"><span class="date">2026-10-17</span><span class="views">🔗 进入资源库</span></div>
+    </div>
+  </a>
 
-function exportJSON() {
-  const links = getLinks();
-  const obj = { links: Object.keys(links).map(key => ({ key: key, value: links[key] })) };
-  const json = JSON.stringify(obj, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'links.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  alert('已导出！把这个links.json上传到GitHub仓库替换原文件即可永久生效。');
-}
+  <a class="card" href="http://pan.d0b.pw/" data-k="公众号 流量主 视频号 小红书 头条 自媒体 变现">
+    <div class="cover c-green"><span class="em">📈</span><span class="ct">自媒体·变现·课程</span></div>
+    <div class="body">
+      <h3>自媒体 / 变现 / 副业课程（85条）</h3>
+      <p>公众号流量主、视频号分成、小红书、头条百家号、YouTube、AI写小说爆文、一人公司等变现路径。</p>
+      <div class="tags"><span class="tag t-free">免费资源</span><span class="tag t-cat">自媒体变现</span></div>
+      <div class="meta"><span class="date">2026-10-17</span><span class="views">🔗 进入资源库</span></div>
+    </div>
+  </a>
 
-function importJSON(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const raw = JSON.parse(e.target.result);
-      const imported = Array.isArray(raw) ? Object.fromEntries(raw.map(x => [x.key, x.value])) : (raw.links ? Object.fromEntries(raw.links.map(x => [x.key, x.value])) : raw);
-      const existing = getLinks();
-      const merged = Object.assign({}, existing, imported);
-      saveLinks(merged);
-      renderLinkList();
-      alert('导入成功！共 ' + Object.keys(imported).length + ' 条短链');
-    } catch (err) {
-      alert('导入失败：文件格式不正确');
-    }
-  };
-  reader.readAsText(file);
-}
+  <a class="card" href="http://pan.d0b.pw/" data-k="AI工具 提示词 素材 语音克隆 工作流 整合包">
+    <div class="cover c-purple"><span class="em">🤖</span><span class="ct">AI工具·提示词·素材</span></div>
+    <div class="body">
+      <h3>AI工具 / 提示词 / 素材（45条）</h3>
+      <p>各类AI提示词合集、Midjourney/即梦素材、语音克隆TTS、画质修复、3D建模、工作流整合包。</p>
+      <div class="tags"><span class="tag t-free">免费资源</span><span class="tag t-cat">AI工具素材</span></div>
+      <div class="meta"><span class="date">2026-10-17</span><span class="views">🔗 进入资源库</span></div>
+    </div>
+  </a>
+
+  <a class="card" href="http://pan.d0b.pw/" data-k="网盘 会员 白嫖 福利 转存 工具">
+    <div class="cover" style="background:linear-gradient(135deg,#ffcf5c,#ff9f43)"><span class="em">🎁</span><span class="ct">福利·网盘·工具</span></div>
+    <div class="body">
+      <h3>网盘会员福利与实用工具（32条）</h3>
+      <p>夸克/百度/迅雷网盘会员白嫖、转存技巧、注册送积分、网盘管理与批量转存工具。</p>
+      <div class="tags"><span class="tag t-free">免费资源</span><span class="tag t-cat">福利工具</span></div>
+      <div class="meta"><span class="date">2026-10-17</span><span class="views">🔗 进入资源库</span></div>
+    </div>
+  </a>
+
+  <a class="card" href="http://pan.d0b.pw/" data-k="AI在线工具 网站 抠图 绘画 建模 官网">
+    <div class="cover" style="background:linear-gradient(135deg,#5cd6ff,#3aa0ff)"><span class="em">🌐</span><span class="ct">AI工具与网站</span></div>
+    <div class="body">
+      <h3>在线AI工具网站合集（79个）</h3>
+      <p>抠图、AI绘画、3D建模、电商模特、换衣、老照片修复、实时绘画等免安装在线AI工具直达。</p>
+      <div class="tags"><span class="tag t-free">免费资源</span><span class="tag t-cat">AI工具网站</span></div>
+      <div class="meta"><span class="date">2026-10-17</span><span class="views">🔗 进入资源库</span></div>
+    </div>
+  </a>
+
+  <p class="empty" id="empty">没有匹配的分类，换个关键词试试～</p>
+</main>
+
+<footer>
+  盘神AI资源站 · 免费资源整理分享，持续更新<br>
+  合作 / 投稿邮箱：<a href="mailto:3013628741@qq.com">3013628741@qq.com</a>
+</footer>
+
+<script>
+const box=document.getElementById('q');
+const cards=document.querySelectorAll('#grid .card');
+const empty=document.getElementById('empty');
+box.addEventListener('input',()=>{
+  const k=box.value.trim().toLowerCase();let n=0;
+  cards.forEach(c=>{
+    const ok=!k||(c.dataset.k+' '+c.textContent).toLowerCase().includes(k);
+    c.style.display=ok?'':'none';if(ok)n++;
+  });
+  empty.style.display=n?'none':'block';
+});
 </script>
 </body>
 </html>
