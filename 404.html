@@ -3,20 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>跳转中...</title>
+<title>盘搜短链</title>
 <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
   color: white;
   text-align: center;
 }
-.container { padding: 40px; }
-h1 { font-size: 24px; margin-bottom: 20px; }
+.container {
+  max-width: 400px;
+  width: 100%;
+}
+.icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+h1 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+p {
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+.copy-btn {
+  display: inline-block;
+  padding: 14px 30px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+  margin-bottom: 15px;
+}
+.copy-btn:hover {
+  transform: translateY(-2px);
+}
+.tip {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-top: 10px;
+}
 .spinner {
   width: 40px;
   height: 40px;
@@ -29,18 +69,43 @@ h1 { font-size: 24px; margin-bottom: 20px; }
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-.error { display: none; }
-.error.show { display: block; }
-a { color: white; text-decoration: underline; }
+.wechat-tip {
+  background: rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 25px;
+  backdrop-filter: blur(10px);
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="spinner" id="spinner"></div>
-  <h1 id="message">正在跳转...</h1>
-  <div class="error" id="error">
-    <p>未找到对应的短链接</p>
-    <p><a href="/">返回首页</a></p>
+  <!-- 加载中 -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>正在加载...</p>
+  </div>
+
+  <!-- 微信/QQ提示页 -->
+  <div id="wechatTip" style="display:none;" class="wechat-tip">
+    <div class="icon">📱</div>
+    <h1>请在浏览器中打开</h1>
+    <p>微信/QQ内置浏览器限制，请复制链接到手机浏览器（Safari、Chrome等）中打开。</p>
+    <button class="copy-btn" onclick="copyLink()">📋 复制链接</button>
+    <p class="tip">点击右上角「...」选择「在浏览器打开」</p>
+  </div>
+
+  <!-- 普通跳转 -->
+  <div id="normalJump" style="display:none;">
+    <div class="spinner"></div>
+    <p>正在跳转到目标页面...</p>
+  </div>
+
+  <!-- 错误页 -->
+  <div id="errorPage" style="display:none;">
+    <div class="icon">❌</div>
+    <h1>未找到短链接</h1>
+    <p>这个短链接不存在或已失效</p>
+    <button class="copy-btn" onclick="window.location.href='/'">返回首页</button>
   </div>
 </div>
 
@@ -49,6 +114,12 @@ a { color: white; text-decoration: underline; }
 const path = window.location.pathname.substring(1);
 const shortCode = path.split('/')[0];
 
+// 检测是否在微信/QQ里
+function isWeChatOrQQ() {
+  const ua = navigator.userAgent.toLowerCase();
+  return ua.includes('micromessenger') || ua.includes('qq/') || ua.includes('qzone/');
+}
+
 if (!shortCode) {
   window.location.href = '/';
 } else {
@@ -56,32 +127,50 @@ if (!shortCode) {
   const localLinks = JSON.parse(localStorage.getItem('pansou_links') || '{}');
   
   if (localLinks[shortCode]) {
-    document.getElementById('message').textContent = '正在跳转到目标链接...';
-    setTimeout(() => {
-      window.location.href = localLinks[shortCode];
-    }, 500);
+    handleRedirect(localLinks[shortCode]);
   } else {
     // 从links.json查找（永久短链）
     fetch('/links.json')
       .then(res => res.json())
       .then(links => {
         if (links[shortCode]) {
-          document.getElementById('message').textContent = '正在跳转到目标链接...';
-          setTimeout(() => {
-            window.location.href = links[shortCode];
-          }, 500);
+          handleRedirect(links[shortCode]);
         } else {
-          document.getElementById('spinner').style.display = 'none';
-          document.getElementById('message').style.display = 'none';
-          document.getElementById('error').classList.add('show');
+          showError();
         }
       })
       .catch(() => {
-        document.getElementById('spinner').style.display = 'none';
-        document.getElementById('message').style.display = 'none';
-        document.getElementById('error').classList.add('show');
+        showError();
       });
   }
+}
+
+function handleRedirect(targetUrl) {
+  if (isWeChatOrQQ()) {
+    // 微信/QQ里，显示提示页
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('wechatTip').style.display = 'block';
+    window.targetUrl = targetUrl;
+  } else {
+    // 普通浏览器，直接跳转
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('normalJump').style.display = 'block';
+    setTimeout(() => {
+      window.location.href = targetUrl;
+    }, 800);
+  }
+}
+
+function copyLink() {
+  const url = window.location.origin + '/' + shortCode;
+  navigator.clipboard.writeText(url).then(() => {
+    alert('链接已复制！请打开浏览器粘贴访问');
+  });
+}
+
+function showError() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('errorPage').style.display = 'block';
 }
 </script>
 </body>
